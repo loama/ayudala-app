@@ -13,7 +13,7 @@
         </div>
       </div>
 
-      <form v-on:submit.prevent="" class="loginUser()">
+      <form v-on:submit.prevent="loginUser()" class="login">
 
         <div class="input"
              v-bind:class="{active: loginEmailActive}">
@@ -71,9 +71,10 @@
 </template>
 
 <script>
+import store from '../assets/vuex/storage.js'
+
 import * as firebase from "firebase/app"
 import "firebase/auth"
-
 
 export default {
     components: {
@@ -182,17 +183,7 @@ export default {
         })
       },
       add () {
-        db.collection("users").add({
-            first: "Ada",
-            last: "Lovelace",
-            born: 1815
-        })
-        .then(function(docRef) {
-            console.log("Document written with ID: ", docRef.id);
-        })
-        .catch(function(error) {
-            console.error("Error adding document: ", error);
-        });
+        store.dispatch('addData', {})
       }
     }
 }
