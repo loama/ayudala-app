@@ -1,16 +1,46 @@
 <template>
     <div id="loadingPage">
       <div class="lds-dual-ring"></div>
+
+      <span class="blue title"
+            v-bind:class="{opaque: loggedIn}">ayuda.la</span>
+      <span class="white title"
+            v-bind:class="{opaque: loggedIn === false}">ayuda.la</span>
     </div>
 </template>
 
 <script>
+import store from '../assets/vuex/storage.js'
+
 export default {
     components: {
     },
+    computed: {
+      user () {
+        return store.state.user
+      }
+    },
+    methods: {
+      animateToLogin () {
+
+      },
+      animateToHome () {
+
+      }
+    },
     data() {
-        return {
+      return {}
+    },
+    props: ['loggedIn'],
+    watch: {
+    	loggedIn: function(newVal, oldVal) { // watch it
+        let loadingPage = document.getElementById('loadingPage')
+        if (newVal === true) {
+          loadingPage.style.opacity = '0'
+        } else if (newVal === false) {
+          loadingPage.style.opacity = '0'
         }
+      }
     }
 }
 </script>
@@ -24,7 +54,26 @@ export default {
     left: 0
     position: fixed
     top: 0
+    transition: all 0.3s
     width: 100vw
+
+    .blue
+      color: $blue
+
+    .white
+      color: #FFF
+
+    .title
+      font-size: 32px
+      left: 0
+      position: absolute
+      text-align: center
+      top: 40px
+      transition: all 0.3s
+      width: 100%
+
+      &.opaque
+        opacity: 1
 
     .lds-dual-ring
       display: inline-block

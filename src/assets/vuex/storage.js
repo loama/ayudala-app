@@ -21,9 +21,8 @@ let db = firebase.firestore()
 
 export default new Vuex.Store({
   state: {
-    user: {}
+    user: null
   },
-
   actions: {
     addData (context, payload) {
       console.log('abc')
@@ -40,6 +39,7 @@ export default new Vuex.Store({
       })
     },
     userLogged (context, user) {
+      context.state.user = user
       console.log(user)
     }
   },

@@ -7,11 +7,11 @@
 
         <problemModal />
 
-        <loginPage />
+        <loginPage v-if="!user" />
 
         <!--<onboarding /> -->
 
-        <loadingPage />
+        <loadingPage v-bind:loggedIn="loggedIn"/>
       </div>
 </template>
 <script>
@@ -34,11 +34,18 @@ export default {
       loginPage: loginPage,
       problemModal: problemModal
     },
+    computed: {
+      user () {
+        return store.state.user
+      }
+    },
     data() {
       return {
+        loggedIn: null
       }
     },
     mounted () {
+      var self = this
       firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
         .then(function() {
           // Existing and future Auth states are now persisted in the current
@@ -66,9 +73,11 @@ export default {
           var providerData = user.providerData
           // ...
           store.dispatch('userLogged', user)
+          self.loggedIn = true
         } else {
           // User is signed out.
           // ...
+          self.loggedIn = false
         }
       })
     }
