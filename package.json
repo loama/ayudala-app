@@ -49,6 +49,7 @@
     "cordova-android": "^8.0.0",
     "cordova-browser": "^6.0.0",
     "fastclick": "^1.0.6",
+    "firebase": "^6.4.2",
     "framework7": "^4.4.0",
     "framework7-icons": "^2.3.1",
     "framework7-vue": "^4.4.0",

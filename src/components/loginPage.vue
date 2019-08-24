@@ -1,26 +1,251 @@
 <template>
-    <div id="loginPage">
-      loginPage
+    <div id="loginPage" v-bind:class="view">
+      <div class="header">
+        <span class="logo">ayuda.la</span>
+      </div>
+
+      <div v-on:click="changeView()" class="change_view">
+        <div> login </div>
+        <div> crear cuenta </div>
+        <div class="indicator" v-bind:class="view">
+          <span v-if="view === 'login'"> login </span>
+          <span v-if="view === 'create_user'"> crear cuenta </span>
+        </div>
+      </div>
+
+      <div v-on:click="createUser()">create user</div>
+
+      <form v-on:submit.prevent="" class="login">
+
+        <div class="input"
+             v-bind:class="{active: loginEmailActive}">
+          <input type="email"
+                v-model="login.email.value">
+
+          <span class="placeholder">email</span>
+        </div>
+
+        <div class="input">
+          <input type="password">
+          <span class="placeholder">password</span>
+        </div>
+
+        <input type="submit" value="Iniciar Sesión">
+      </form>
+
+      <form v-on:submit.prevent="" class="create_user">
+        <div class="input">
+          <input type="text">
+          <span class="placeholder">Nombre</span>
+        </div>
+
+        <div class="input">
+          <input type="email">
+          <span class="placeholder">email</span>
+        </div>
+
+        <div class="input">
+          <input type="password">
+          <span class="placeholder">contraseña</span>
+        </div>
+
+        <div class="input">
+          <input type="password">
+          <span class="placeholder">confirma contraseña</span>
+        </div>
+
+        <input type="submit" value="Crear Cuenta">
+      </form>
     </div>
 </template>
 
 <script>
+import * as firebase from "firebase/app"
+import "firebase/auth"
+
 export default {
     components: {
     },
-    data() {
-        return {
+    computed: {
+      loginEmailActive () {
+        if (this.login.emailFocused || this.login.email.value !== '') {
+          return true
+        } else {
+          return false
         }
+      }
+    },
+    data() {
+      return {
+        login: {
+          email: {
+            value: ''
+          },
+          password: {
+            value: ''
+          }
+        },
+        newAccount: {
+          nameFocused: false,
+          emailFocused: false,
+          passwordFocused: false,
+          passwordConfirmationFocused: false
+        },
+        view: 'login' // 'create_user'
+      }
+    },
+    methods: {
+      changeView () {
+        if (this.view === 'login') {
+          this.view = 'create_user'
+        } else {
+          this.view = 'login'
+        }
+      },
+      createUser () {
+        let email = 'abc@gmail.com'
+        let password = 'abc3wirjw3eoifc'
+        firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+          var errorCode = error.code
+          var errorMessage = error.message
+          alert(error)
+          console.log(error)
+        })
+      }
     }
 }
 </script>
 
 <style lang="sass" scoped>
+  @import "../variables.sass"
+
   #loginPage
-    background: red
+    background: #FFF
     height: 100vh
     left: 0
+    padding: 420px 0
     position: fixed
     top: 0
     width: 100vw
+
+    .header
+      background: $blue
+      height: 200px
+      left: 0
+      position: absolute
+      top: 0
+      width: 100vw
+
+      .logo
+        color: #FFF
+        display: block
+        font-family: 'GoogleSans-Bold'
+        font-size: 32px
+        margin: 40px auto
+        text-align: center
+
+    .change_view
+      height: 44px
+      position: absolute
+      top: 156px
+      width: 100vw
+
+      div
+        color: #FFF
+        display: inline-block
+        line-height: 48px
+        position: relative
+        text-align: center
+        width: 49%
+
+      .indicator
+        background: #FFF
+        border-radius: 4px 4px 0 0
+        color: $blue
+        height: 48px
+        position: absolute
+        top: 0
+        left: 0
+        transition: all 0.3s
+        width: 50%
+
+        &.create_user
+          transform: translate3d(50vw, 0, 0)
+
+    form.login
+      background: #FFF
+      left: calc(50vw - 140px)
+      margin: 0 auto
+      padding: 8px
+      position: absolute
+      top: 220px
+      transition: all 0.3s
+      width: 280px
+      z-index: 1
+
+      .input
+        position: relative
+
+        .placeholder
+          color: #888
+          left: 20px
+          pointer-events: none
+          position: absolute
+          top: 16px
+          transition: all 0.3s
+
+    form.create_user
+      left: calc(150vw - 140px)
+      margin: 0 auto
+      padding: 8px
+      position: absolute
+      top: 220px
+      transition: all 0.3s
+      width: 280px
+      z-index: 1
+
+      .input
+        position: relative
+
+        .placeholder
+          color: #888
+          left: 20px
+          pointer-events: none
+          position: absolute
+          top: 16px
+          transition: all 0.3s
+
+    input
+      border: 1px solid #F0F0F0
+      border-radius: 4px
+      display: block
+      font-size: 16px
+      margin: 8px auto
+      height: 32px
+      outline: none
+      padding: 8px
+      width: 240px
+
+      &[type="submit"]
+        background: orange
+        color: #FFF
+        font-size: 16px
+        height: 48px
+        margin-top: 24px
+        width: 258px
+
+    &.create_user
+      form.login, form.create_user
+        transform: translate3d(-100vw, 0, 0)
+
+    .input.active
+      .placeholder
+        transform: scale3d(.75, .75, 1) translate3d(0, -16px, 0)
+        transform-origin: top left
+
+    input:focus + .placeholder
+      transform: scale3d(.75, .75, 1) translate3d(0, -16px, 0)
+      transform-origin: top left
+
+
 </style>
