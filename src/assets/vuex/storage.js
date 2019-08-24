@@ -9,8 +9,8 @@ export default new Vuex.Store({
   },
 
   actions: {
-    userLogged ({commit}, user) {
-      commit('USER_LOGGED', user)
+    userLogged (context, user) {
+      console.log(user)
     }
   },
 

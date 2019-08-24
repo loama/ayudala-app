@@ -13,9 +13,7 @@
         </div>
       </div>
 
-      <div v-on:click="createUser()">create user</div>
-
-      <form v-on:submit.prevent="" class="login">
+      <form v-on:submit.prevent="" class="loginUser()">
 
         <div class="input"
              v-bind:class="{active: loginEmailActive}">
@@ -25,37 +23,50 @@
           <span class="placeholder">email</span>
         </div>
 
-        <div class="input">
-          <input type="password">
+        <div class="input"
+             v-bind:class="{active: loginPasswordActive}">
+          <input type="password"
+                v-model="login.password.value">
           <span class="placeholder">password</span>
         </div>
 
         <input type="submit" value="Iniciar Sesión">
       </form>
 
-      <form v-on:submit.prevent="" class="create_user">
-        <div class="input">
-          <input type="text">
+      <form v-on:submit.prevent="createUser()" class="create_user">
+        <div class="input"
+            v-bind:class="{active: createUserNameActive}">
+          <input type="text"
+                v-model="create_user.name.value">
           <span class="placeholder">Nombre</span>
         </div>
 
-        <div class="input">
-          <input type="email">
+        <div class="input"
+            v-bind:class="{active: createUserEmailActive}">
+          <input type="email"
+                v-model="create_user.email.value">
           <span class="placeholder">email</span>
         </div>
 
-        <div class="input">
-          <input type="password">
+        <div class="input"
+            v-bind:class="{active: createUserPasswordActive}">
+          <input type="password"
+                v-model="create_user.password.value">
           <span class="placeholder">contraseña</span>
         </div>
 
-        <div class="input">
-          <input type="password">
+        <div class="input"
+            v-bind:class="{active: createUserSecondPasswordActive}">
+          <input type="password"
+                v-model="create_user.secondPassword.value">
           <span class="placeholder">confirma contraseña</span>
         </div>
 
         <input type="submit" value="Crear Cuenta">
+
+        <div v-on:click="add()">añadir</div>
       </form>
+
     </div>
 </template>
 
@@ -63,16 +74,55 @@
 import * as firebase from "firebase/app"
 import "firebase/auth"
 
+
 export default {
     components: {
     },
     computed: {
       loginEmailActive () {
-        if (this.login.emailFocused || this.login.email.value !== '') {
+        if (this.login.email.value !== '') {
           return true
         } else {
           return false
         }
+      },
+      loginPasswordActive () {
+        if (this.login.password.value !== '') {
+          return true
+        } else {
+          return false
+        }
+      },
+      createUserNameActive () {
+        if (this.create_user.name.value !== '') {
+          return true
+        } else {
+          return false
+        }
+      },
+      createUserEmailActive () {
+        if (this.create_user.email.value !== '') {
+          return true
+        } else {
+          return false
+        }
+      },
+      createUserPasswordActive () {
+        if (this.create_user.password.value !== '') {
+          return true
+        } else {
+          return false
+        }
+      },
+      createUserSecondPasswordActive () {
+        if (this.create_user.secondPassword.value !== '') {
+          return true
+        } else {
+          return false
+        }
+      },
+      user () {
+        return store.state.user
       }
     },
     data() {
@@ -85,11 +135,19 @@ export default {
             value: ''
           }
         },
-        newAccount: {
-          nameFocused: false,
-          emailFocused: false,
-          passwordFocused: false,
-          passwordConfirmationFocused: false
+        create_user: {
+          name: {
+            value: ''
+          },
+          email: {
+            value: ''
+          },
+          password: {
+            value: ''
+          },
+          secondPassword: {
+            value: ''
+          }
         },
         view: 'login' // 'create_user'
       }
@@ -103,14 +161,38 @@ export default {
         }
       },
       createUser () {
-        let email = 'abc@gmail.com'
-        let password = 'abc3wirjw3eoifc'
+        let email = this.create_user.email.value
+        let password = this.create_user.password.value
         firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
           var errorCode = error.code
           var errorMessage = error.message
           alert(error)
           console.log(error)
         })
+      },
+      loginUser () {
+        let email = this.login.email.value
+        let password = this.login.password.value
+        firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code
+          var errorMessage = error.message
+          // ...
+          alert(errorMessage)
+        })
+      },
+      add () {
+        db.collection("users").add({
+            first: "Ada",
+            last: "Lovelace",
+            born: 1815
+        })
+        .then(function(docRef) {
+            console.log("Document written with ID: ", docRef.id);
+        })
+        .catch(function(error) {
+            console.error("Error adding document: ", error);
+        });
       }
     }
 }
