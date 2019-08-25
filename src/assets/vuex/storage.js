@@ -41,6 +41,10 @@ export default new Vuex.Store({
     userLogged (context, user) {
       context.state.user = user
       console.log(user)
+    },
+    userLoggedOut (context) {
+      context.state.user = {}
+      console.log('logged out')
     }
   },
 

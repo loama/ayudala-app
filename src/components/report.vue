@@ -16,10 +16,19 @@
       </div>
 
       <div class="full" v-if="modalPosition === 'full'">
+        <div class="head">
+          head
+        </div>
+
+        <div class="messages">
+        </div>
+
         <div class="send">
-          <input type="text">
-          <div class="button">
-            <div class="seeableButton"></div>
+          <input type="text" v-model="message.text">
+          <div class="button" v-bind:class="{active: canSendMessage}">
+            <div class="seeableButton">
+              <img src="../assets/images/paper-plane.svg">
+            </div>
           </div>
         </div>
       </div>
@@ -32,10 +41,22 @@
 export default {
     components: {
     },
+    computed: {
+      canSendMessage () {
+        if (this.message.text !== '') {
+          return true
+        } else {
+          return false
+        }
+      }
+    },
     data() {
       return {
         modalPosition: 'closed',
-        situation: null
+        situation: null,
+        message: {
+          text: ''
+        }
       }
     },
     methods: {
@@ -73,7 +94,7 @@ export default {
     padding-top: 220px
     overflow-y: hidden
 
-    .head
+    >.head
       background: $blue
       color: #FFF
       height: 140px
@@ -108,6 +129,14 @@ export default {
       &.full
         transform: translate3d(0, -90vh, 0)
 
+        .head
+          border-bottom: 1px solid $border
+          height: 80px
+          left: 0
+          position: fixed
+          top: 0
+          width: 100vw
+
         .send
           background: #F0F0F0
           bottom: 56px
@@ -122,22 +151,35 @@ export default {
             font-size: 14px
             height: 40px
             margin: 8px
+            outline: none
             padding: 0 8px
             width: calc(100vw - 80px)
 
           .button
             bottom: 0
             height: 56px
+            opacity: 0.5
             position: absolute
+            pointer-events: none
             right: 0
+            transition: all 0.3
             width: 56px
+
+            &.active
+              opacity: 1
+              pointer-events: all
 
             .seeableButton
               background: $blue
               border-radius: 50%
               height: 40px
               margin: 8px
+              transition: all 0.3s
               width: 40px
+
+              img
+                height: 20px
+                margin: 8px
 
       .title
         display: block

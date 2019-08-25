@@ -10,16 +10,34 @@
       <div class="card">
 
       </div>
+
+      <div v-on:click="logout()"> cerrar sesión </div>
     </div>
 </template>
 
 <script>
+import * as firebase from "firebase/app"
+import "firebase/auth"
+
 export default {
     components: {
     },
     data() {
         return {
         }
+    },
+    methods: {
+      logout () {
+        firebase.auth().signOut()
+          .then(function() {
+            // Sign-out successful.
+            console.log('logged out')
+          })
+          .catch(function(error) {
+            // An error happened
+            console.log('error')
+          })
+      }
     }
 }
 </script>

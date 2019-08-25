@@ -2,7 +2,7 @@
     <div>
         <!-- <problemModal /> -->
 
-        <loginPage v-if="!user" />
+        <loginPage v-if="loggedIn === false" />
 
         <!--<onboarding /> -->
 
@@ -127,6 +127,7 @@ export default {
         } else {
           // User is signed out.
           // ...
+          store.dispatch('userLoggedOut')
           self.loggedIn = false
         }
       })
