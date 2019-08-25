@@ -49,6 +49,7 @@
     "axios": "^0.19.0",
     "cordova-android": "^8.0.0",
     "cordova-browser": "^6.0.0",
+    "cordova-plugin-geolocation": "git+https://github.com/apache/cordova-plugin-geolocation.git",
     "cordova-sms-plugin": "^1.0.0",
     "fastclick": "^1.0.6",
     "firebase": "^6.4.2",
@@ -66,7 +67,8 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "cordova-sms-plugin": {}
+      "cordova-sms-plugin": {},
+      "cordova-plugin-geolocation": {}
     },
     "platforms": [
       "browser",

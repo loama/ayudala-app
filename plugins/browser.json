@@ -12,6 +12,9 @@
     },
     "cordova-sms-plugin": {
       "PACKAGE_NAME": "com.ayudala.app"
+    },
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "com.ayudala.app"
     }
   },
   "dependent_plugins": {}

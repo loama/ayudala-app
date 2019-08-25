@@ -62,6 +62,13 @@ export default {
               break
 
             case 3:
+              console.log('3')
+              navigator.geolocation.getCurrentPosition(function (success) {
+                console.log('success')
+              },
+              function () {
+                alert('error')
+              }, {})
               break
           }
         } else {
