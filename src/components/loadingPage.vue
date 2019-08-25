@@ -40,6 +40,9 @@ export default {
         } else if (newVal === false) {
           loadingPage.style.opacity = '0'
         }
+        setTimeout(() => {
+          loadingPage.style.display = 'none'
+        }, 300)
       }
     }
 }
@@ -56,6 +59,7 @@ export default {
     top: 0
     transition: all 0.3s
     width: 100vw
+    z-index: 1000
 
     .blue
       color: $blue

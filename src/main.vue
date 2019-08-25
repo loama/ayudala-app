@@ -1,17 +1,59 @@
 <template>
     <div>
-
-        <div id="problem-choose">
-          hola
-        </div>
-
-        <problemModal />
+        <!-- <problemModal /> -->
 
         <loginPage v-if="!user" />
 
         <!--<onboarding /> -->
 
         <loadingPage v-bind:loggedIn="loggedIn"/>
+
+        <div class="view" v-bind:class="view">
+          <div class="page account">
+            <account />
+          </div>
+
+          <div class="page report">
+            <report />
+          </div>
+
+          <div class="page settings">
+            <settings />
+          </div>
+        </div>
+
+        <div class="nav">
+          <div class="nav-item"
+              v-on:click="view = 'account'">
+              <img class="icon"
+                    src="./assets/images/user.svg">
+
+              <img class="icon filled"
+                    v-if="view === 'account'"
+                    src="./assets/images/user-filled.svg">
+          </div>
+
+          <div class="nav-item"
+              v-on:click="view = 'report'">
+              <img class="icon"
+                    src="./assets/images/radiation.svg">
+
+              <img class="icon filled"
+                    v-if="view === 'report'"
+                    src="./assets/images/radiation-filled.svg">
+          </div>
+
+          <div class="nav-item"
+              v-on:click="view = 'settings'">
+              <img class="icon"
+                    src="./assets/images/cog.svg">
+
+              <img class="icon filled"
+                    v-if="view === 'settings'"
+                    src="./assets/images/cog-filled.svg">
+          </div>
+        </div>
+
       </div>
 </template>
 <script>
@@ -24,11 +66,18 @@ import onboarding from './components/onboarding'
 import loginPage from './components/loginPage'
 import problemModal from './components/problemModal'
 
+import account from './components/account'
+import report from './components/report'
+import settings from './components/settings'
+
 import * as firebase from "firebase/app"
 import "firebase/auth"
 
 export default {
     components: {
+      account,
+      report,
+      settings,
       loadingPage: loadingPage,
       onboarding: onboarding,
       loginPage: loginPage,
@@ -41,7 +90,8 @@ export default {
     },
     data() {
       return {
-        loggedIn: null
+        loggedIn: null,
+        view: 'report'
       }
     },
     mounted () {
@@ -85,10 +135,15 @@ export default {
 </script>
 
 <style lang="sass">
+  @import "./variables.sass"
 
   @font-face
     font-family: 'GoogleSans'
     src: url('assets/fonts/GoogleSans-Regular.ttf')
+
+  @font-face
+    font-family: 'GoogleSans-Medium'
+    src: url('assets/fonts/GoogleSans-Medium.ttf')
 
   @font-face
     font-family: 'GoogleSans-Bold'
@@ -96,5 +151,59 @@ export default {
 
   html, body
     font-family: 'GoogleSans'
+    margin: 0
 
+  .nav
+    background: #FFF
+    border-top: 1px solid $border
+    bottom: 0
+    height: 56px
+    position: fixed
+    right: 0
+    width: 100vw
+
+    .nav-item
+      height: 56px
+      display: inline-block
+      position: relative
+      vertical-align: top
+      width: 32%
+
+      img
+        left: calc(16vw - 12px)
+        position: absolute
+        top: 16px
+        width: 20px
+
+  .view
+    height: 100vh
+    left: 0
+    overflow-x: hidden
+    position: fixed
+    transform: translate3d(-100vw, 0, 0)
+    transition: all 0.3s
+    width: 300vw
+
+    &.account
+      transform: translate3d(0, 0, 0)
+
+    &.report
+      transform: translate3d(-100vw, 0, 0)
+
+    &.settings
+      transform: translate3d(-200vw, 0, 0)
+
+    .page
+      min-height: 100vh
+      position: absolute
+      width: 100vw
+
+      &:nth-child(1)
+        left: 0
+
+      &:nth-child(2)
+        left: 100vw
+
+      &:nth-child(3)
+        left: 200vw
 </style>
