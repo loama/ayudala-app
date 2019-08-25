@@ -164,11 +164,27 @@ export default {
       createUser () {
         let email = this.create_user.email.value
         let password = this.create_user.password.value
+        let self = this
+
         firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
           var errorCode = error.code
           var errorMessage = error.message
           alert(error)
           console.log(error)
+        }).then(function (response) {
+          console.log('abc')
+
+          let payload = {
+            collection: 'usuarios',
+            data: {
+              id: response.user.uid,
+              name: self.create_user.name.value
+            }
+          }
+
+          console.log(payload)
+
+          store.dispatch('addData', payload)
         })
       },
       loginUser () {

@@ -32,6 +32,7 @@ function makeid(length) {
 export default new Vuex.Store({
   state: {
     user: null,
+    userSecond: null,
     conversation: null
   },
   actions: {
