@@ -19,9 +19,20 @@ firebase.initializeApp(firebaseConfig)
 
 let db = firebase.firestore()
 
+function makeid(length) {
+   var result           = '';
+   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   var charactersLength = characters.length;
+   for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   return result;
+}
+
 export default new Vuex.Store({
   state: {
-    user: null
+    user: null,
+    conversation: null
   },
   actions: {
     addData (context, payload) {
@@ -36,6 +47,18 @@ export default new Vuex.Store({
         console.error("Error adding document: ", error);
       })
     },
+    sendMessage (context, payload) {
+      console.log(payload)
+      let id = makeid(15)
+
+      db.collection("mensajes").doc(payload.id).update({
+        [id]: {
+          sender: 'original',
+          value: payload.value,
+          timestamp: Math.floor(Date.now() / 1000)
+        }
+      })
+    },
     userLogged (context, user) {
       context.state.user = user
       console.log(user)
@@ -43,6 +66,20 @@ export default new Vuex.Store({
     userLoggedOut (context) {
       context.state.user = {}
       console.log('logged out')
+    },
+    conversation (context, payload) {
+      db.collection("mensajes").doc(payload)
+        .onSnapshot(function(doc) {
+          let conversation = []
+          console.log(doc.data())
+          for (var message in doc.data()) {
+            conversation.push(doc.data()[message])
+          }
+
+          conversation.sort(function(a, b){return a.timestamp - b.timestamp})
+
+          context.state.conversation = conversation
+        })
     }
   },
 

@@ -21,11 +21,16 @@
         </div>
 
         <div class="messages">
+          <div class="message" v-for="message in conversation" v-bind:class="message.sender">
+            <div class="text">
+              {{message.value}}
+            </div>
+          </div>
         </div>
 
         <div class="send">
           <input type="text" v-model="message.text">
-          <div class="button" v-bind:class="{active: canSendMessage}">
+          <div class="button" v-bind:class="{active: canSendMessage}" v-on:click="sendMessage()">
             <div class="seeableButton">
               <img src="../assets/images/paper-plane.svg">
             </div>
@@ -40,6 +45,8 @@
 <script>
 import store from '../assets/vuex/storage.js'
 
+import axios from 'axios'
+
 export default {
     components: {
     },
@@ -50,6 +57,14 @@ export default {
         } else {
           return false
         }
+      },
+      conversation () {
+        let conversation = store.state.conversation
+        if (conversation !== null) {
+          conversation.sort(function(a, b){return a.timestamp - b.timestamp})
+        }
+
+        return conversation
       }
     },
     data() {
@@ -84,29 +99,38 @@ export default {
       },
       confirmProblem () {
         this.modalPosition = 'full'
-        store.dispatch('addData', {
+        axios.post('https://ayudala.herokuapp.com/sms', {
+          Body: {
+            id: 'abc',
+            lat: '19',
+            lng: '80',
+            type: 'peligro'
+          }
+        })
+        .then(function (response) {
+          console.log(response)
+          console.log('axios')
+
+          store.dispatch('conversation', 'yasVrXvf0vRXHWgjhhch')
+
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+        /* store.dispatch('addData', {
           collection: 'alertas',
           data: {
             a: 'b'
           }
+        })*/
+      },
+      sendMessage () {
+        var self = this
+        store.dispatch('sendMessage', {
+          id: 'yasVrXvf0vRXHWgjhhch',
+          value: self.message.text
         })
-
-        var number = '+5215522772428'
-        var message = 'puto'
-        console.log("number=" + number + ", message= " + message);
-
-        //CONFIGURATION
-        var options = {
-            replaceLineBreaks: false, // true to replace \n by a new line, false by default
-            android: {
-                intent: ''  // send SMS with the native android SMS messaging
-                //intent: '' // send SMS without opening any other app
-            }
-        };
-
-        var success = function () { alert('Message sent successfully'); }
-        var error = function (e) { alert('Message Failed:' + e); }
-        sms.send(number, message, options, success, error)
+        this.message.text = ''
       }
     }
 }
@@ -141,7 +165,7 @@ export default {
 
     .modal
       background: #FFF
-      height: 90vh
+      height: calc(90vh - 80px)
       position: absolute
       top: 100vh
       transition: all 0.3s
@@ -152,6 +176,7 @@ export default {
         transform: translate3d(0, -200px, 0)
 
       &.full
+        padding-top: 80px
         transform: translate3d(0, -90vh, 0)
 
         .head
@@ -161,6 +186,35 @@ export default {
           position: fixed
           top: 0
           width: 100vw
+
+        .messages
+          max-height: calc(90vh - 194px)
+          overflow-y: scroll
+
+        .message
+          margin: 8px
+          padding: 20px 0
+          position: relative
+          text-align: left
+
+          .text
+            background: #FFF
+            border: 1px solid $border
+            border-radius: 8px
+            left: 0
+            margin: 8px
+            max-width: 200px
+            padding: 8px
+            position: absolute
+            top: 0
+
+          &.original
+            .text
+              background: $blue
+              color: #FFF
+              left: unset
+              right: 0
+              text-align: right
 
         .send
           background: #F0F0F0
