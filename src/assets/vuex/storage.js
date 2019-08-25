@@ -26,16 +26,14 @@ export default new Vuex.Store({
   actions: {
     addData (context, payload) {
       console.log('abc')
-      db.collection("mensajes").add({
-          first: "Ada",
-          last: "Lovelace",
-          born: 1815
-      })
+      db.collection(payload.collection).add(
+        payload.data
+      )
       .then(function(docRef) {
-          console.log("Document written with ID: ", docRef.id);
+        console.log("Document written with ID: ", docRef.id);
       })
       .catch(function(error) {
-          console.error("Error adding document: ", error);
+        console.error("Error adding document: ", error);
       })
     },
     userLogged (context, user) {

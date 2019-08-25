@@ -18,6 +18,8 @@ import store from './assets/vuex/storage.js'
 // Add the Firebase products that you want to use
 // import "firebase/auth"
 // import "firebase/firestore"
+import VueCarousel from 'vue-carousel'
+Vue.use(VueCarousel)
 
 // Init Vue App
 export default new Vue({

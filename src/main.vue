@@ -4,7 +4,7 @@
 
         <loginPage v-if="loggedIn === false" />
 
-        <!--<onboarding /> -->
+        <onboarding />
 
         <loadingPage v-bind:loggedIn="loggedIn"/>
 
