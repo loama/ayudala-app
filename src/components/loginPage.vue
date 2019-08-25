@@ -184,7 +184,7 @@ export default {
 
           console.log(payload)
 
-          store.dispatch('addData', payload)
+          store.dispatch('addUser', payload)
         })
       },
       loginUser () {

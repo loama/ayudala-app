@@ -48,6 +48,18 @@ export default new Vuex.Store({
         console.error("Error adding document: ", error);
       })
     },
+    addUser (context, payload) {
+      console.log('abc')
+      db.collection(payload.collection).doc(payload.data.id).set(
+        payload.data
+      )
+      .then(function(docRef) {
+        console.log("User written with ID: ", docRef.id);
+      })
+      .catch(function(error) {
+        console.error("Error adding document: ", error);
+      })
+    },
     sendMessage (context, payload) {
       console.log(payload)
       let id = makeid(15)
@@ -62,7 +74,13 @@ export default new Vuex.Store({
     },
     userLogged (context, user) {
       context.state.user = user
-      console.log(user)
+      console.log(user.uid)
+      db.collection("usuarios").doc(user.uid)
+        .onSnapshot(function(doc) {
+          console.log(doc.data())
+          console.log('abc')
+          context.state.userSecond = doc.data()
+        })
     },
     userLoggedOut (context) {
       context.state.user = {}

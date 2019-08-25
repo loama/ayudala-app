@@ -12,6 +12,8 @@
       </div>
 
       <div v-on:click="logout()"> cerrar sesión </div>
+
+      <div>{{userSecond}}</div>
     </div>
 </template>
 
@@ -19,8 +21,15 @@
 import * as firebase from "firebase/app"
 import "firebase/auth"
 
+import store from '../assets/vuex/storage.js'
+
 export default {
     components: {
+    },
+    computed: {
+      userSecond () {
+        return store.state.userSecond
+      }
     },
     data() {
         return {
