@@ -1,7 +1,7 @@
 <template>
     <div id="account">
       <div class="head">
-        <div class="name">Lucas Galván</div>
+        <div class="name">{{userSecond.name}}</div>
         <div class="profile-pic">
           <div class="img"></div>
         </div>
@@ -11,7 +11,7 @@
 
       </div>
 
-      <div v-on:click="logout()"> cerrar sesión </div>
+      <div v-on:click="logout()" class="logout"> cerrar sesión </div>
 
       <div>{{userSecond}}</div>
     </div>
@@ -94,4 +94,12 @@ export default {
       position: relative
       width: calc(100% - 48px)
       z-index: 1
+
+    .logout
+      color: #A00
+      height: 56px
+      line-height: 56px
+      margin: 16px auto 0 auto
+      text-align: center
+      width: 120px
 </style>

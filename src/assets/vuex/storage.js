@@ -32,7 +32,8 @@ function makeid(length) {
 export default new Vuex.Store({
   state: {
     user: null,
-    userSecond: null,
+    userSecond: {},
+    contacts: {},
     conversation: null
   },
   actions: {
@@ -72,6 +73,18 @@ export default new Vuex.Store({
         }
       })
     },
+    addContact (context, payload) {
+      console.log(payload)
+      let id = makeid(15)
+
+      db.collection("contactos").doc(payload.id).update({
+        [id]: {
+          name: payload.name,
+          phone: payload.phone,
+          timestamp: Math.floor(Date.now() / 1000)
+        }
+      })
+    },
     userLogged (context, user) {
       context.state.user = user
       console.log(user.uid)
@@ -80,6 +93,13 @@ export default new Vuex.Store({
           console.log(doc.data())
           console.log('abc')
           context.state.userSecond = doc.data()
+        })
+
+      db.collection("contactos").doc(user.uid)
+        .onSnapshot(function(doc) {
+          console.log(doc.data())
+          console.log('contacts')
+          context.state.contacts = doc.data()
         })
     },
     userLoggedOut (context) {
