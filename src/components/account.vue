@@ -13,7 +13,6 @@
 
       <div v-on:click="logout()" class="logout"> cerrar sesión </div>
 
-      <div>{{userSecond}}</div>
     </div>
 </template>
 

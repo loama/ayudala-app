@@ -63,8 +63,9 @@ export default {
 
             case 3:
               console.log('3')
-              navigator.geolocation.getCurrentPosition(function (success) {
+              navigator.geolocation.getCurrentPosition(function (location) {
                 console.log('success')
+                console.log(location.coords)
               },
               function () {
                 alert('error')

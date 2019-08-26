@@ -58,6 +58,9 @@ export default {
           return false
         }
       },
+      user () {
+        return store.state.user
+      },
       conversation () {
         let conversation = store.state.conversation
         if (conversation !== null) {
@@ -70,6 +73,7 @@ export default {
     data() {
       return {
         modalPosition: 'closed',
+        conversationId: null,
         situation: null,
         message: {
           text: ''
@@ -99,24 +103,48 @@ export default {
       },
       confirmProblem () {
         this.modalPosition = 'full'
-        axios.post('https://ayudala.herokuapp.com/sms', {
-          Body: {
-            id: 'abc',
-            lat: '19',
-            lng: '80',
-            type: 'peligro'
-          }
-        })
-        .then(function (response) {
-          console.log(response)
-          console.log('axios')
+        var self = this
 
-          store.dispatch('conversation', 'yasVrXvf0vRXHWgjhhch')
+        navigator.geolocation.getCurrentPosition(function (location) {
+          console.log(location)
+          axios.post('https://ayudala.herokuapp.com/sms', {
+            Body: {
+              id: self.user.uid,
+              lat: location.coords.latitude,
+              lng: location.coords.longitude,
+              type: 'peligro'
+            }
+          })
+          .then(function (response) {
+            console.log(response)
+            self.conversationId = response.data.id
+            console.log('axios')
 
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+            store.dispatch('conversation', response.data.id)
+
+            setTimeout(function () {
+              navigator.geolocation.getCurrentPosition(function (location2) {
+                console.log('success')
+                console.log(location2.coords)
+                console.log(self.user)
+                let payload = {
+                  id: self.user.uid, //
+                  location: location2.coords
+                }
+                store.dispatch('addLocation', payload)
+              },
+              function () {
+                alert('error')
+              }, {})
+            }, 2000)
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+        },
+        function () {
+          alert('error')
+        }, {})
         /* store.dispatch('addData', {
           collection: 'alertas',
           data: {
@@ -127,7 +155,7 @@ export default {
       sendMessage () {
         var self = this
         store.dispatch('sendMessage', {
-          id: 'yasVrXvf0vRXHWgjhhch',
+          id: self.conversationId,
           value: self.message.text
         })
         this.message.text = ''

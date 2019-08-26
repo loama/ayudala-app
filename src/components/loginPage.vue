@@ -64,7 +64,6 @@
 
         <input type="submit" value="Crear Cuenta">
 
-        <div v-on:click="add()">añadir</div>
       </form>
 
     </div>

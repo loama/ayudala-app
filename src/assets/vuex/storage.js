@@ -73,6 +73,18 @@ export default new Vuex.Store({
         }
       })
     },
+    addLocation (context, payload) {
+      console.log(payload)
+      let id = makeid(15)
+
+      db.collection("ubicaciones").doc(payload.id).set({
+        [id]: {
+          lat: payload.location.latitude,
+          lng: payload.location.longitude,
+          timestamp: Math.floor(Date.now() / 1000)
+        }
+      })
+    },
     addContact (context, payload) {
       console.log(payload)
       let id = makeid(15)
