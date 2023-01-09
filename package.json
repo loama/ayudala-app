@@ -53,7 +53,7 @@
     "cordova-sms-plugin": "^1.0.0",
     "fastclick": "^1.0.6",
     "firebase": "^6.4.2",
-    "firebase-admin": "^8.4.0",
+    "firebase-admin": "^11.4.1",
     "framework7": "^4.4.0",
     "framework7-icons": "^2.3.1",
     "framework7-vue": "^4.4.0",
